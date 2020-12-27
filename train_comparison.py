@@ -84,7 +84,7 @@ def test(epoch):
     return test_loss / total, acc
 
 
-optimizers = [(LARS, 0.01), (Lamb, 5e-4), (optim.Adam, 5e-4), (optim.SGD, 0.01)]
+optimizers = [(LARS, 0.01), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0.01)]
 
 epochs = 50
 #lr = 0.005
