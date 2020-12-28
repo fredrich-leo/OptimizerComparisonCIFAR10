@@ -12,6 +12,7 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
+from adabelief import AdaBelief
 from lamb import Lamb
 from lars import LARS
 
@@ -84,7 +85,7 @@ def test(epoch):
     return test_loss / total, acc
 
 
-optimizers = [(LARS, 0.1), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0.1)]
+optimizers = [(AdaBelief,  5e-3), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0.1)]
 
 epochs = 50
 #lr = 0.005
