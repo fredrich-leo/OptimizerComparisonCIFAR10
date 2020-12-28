@@ -28,7 +28,7 @@ class LARS(Optimizer):
         >>> optimizer.step()
     """
     def __init__(self, params, lr=0.1, momentum=0,
-                 weight_decay=0, eta=0.001, max_epoch=2450):
+                 weight_decay=0, eta=0.001, max_epoch=1225):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         if momentum < 0.0:
