@@ -1,5 +1,6 @@
 """ Layer-wise adaptive rate scaling for SGD in PyTorch! """
 import torch
+from torch.optim import SGD
 from torch.optim.optimizer import Optimizer, required
 #https://github.com/noahgolmant/pytorch-lars/blob/master/lars.py
 
@@ -21,7 +22,7 @@ class LARS(Optimizer):
         https://arxiv.org/abs/1708.03888
 
     Example:
-        >>> optimizer = LARS(model.parameters(), lr=0.1, eta=1e-3)
+        >>> optimizer = LARS(model.parameters(), lr=0.1, eta=0.001)
         >>> optimizer.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>> optimizer.step()
