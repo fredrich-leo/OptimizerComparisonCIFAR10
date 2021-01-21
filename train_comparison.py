@@ -14,11 +14,10 @@ from tqdm import tqdm
 
 from adabelief import AdaBelief
 from lamb import Lamb
-from lars import LARS
 
 print("Cuda: ", torch.cuda.is_available())
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
+CIFAR10 = False
 
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
@@ -26,9 +25,9 @@ def weights_init(m):
         torch.nn.init.torch.nn.init.xavier(m.bias.data)
 
 
-models = {"resnet18": models.resnet18,
-          "resnet101": models.resnet101,
-          "resnet152": models.resnet152}
+models = {"resnext50_32x4d": models.resnext50_32x4d,
+          "densenet121": models.densenet121,
+          "resnet101": models.resnet101}
 # Data
 print('==> Preparing data..')
 transform_train = transforms.Compose([
@@ -43,15 +42,25 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-trainset = torchvision.datasets.CIFAR10(
-    root='./data', train=True, download=True, transform=transform_train)
-trainloader = torch.utils.data.DataLoader(
-    trainset, batch_size=2048, shuffle=True)
+if CIFAR10 == True:
+    trainset = torchvision.datasets.CIFAR10(
+        root='./data', train=True, download=True, transform=transform_train)
+    trainloader = torch.utils.data.DataLoader(
+        trainset, batch_size=512, shuffle=False)
 
-testset = torchvision.datasets.CIFAR10(
-    root='./data', train=False, download=True, transform=transform_test)
-testloader = torch.utils.data.DataLoader(
-    testset, batch_size=2048, shuffle=False)
+    testset = torchvision.datasets.CIFAR10(
+        root='./data', train=False, download=True, transform=transform_test)
+    testloader = torch.utils.data.DataLoader(
+        testset, batch_size=512, shuffle=False)
+else:
+    trainset = torchvision.datasets.CIFAR100(
+        root='./data', train=True, download=True, transform=transform_train)
+    trainloader = torch.utils.data.DataLoader(
+        trainset, batch_size=512, shuffle=False)
+    testset = torchvision.datasets.CIFAR100(
+        root='./data', train=False, download=True, transform=transform_test)
+    testloader = torch.utils.data.DataLoader(
+        testset, batch_size=512, shuffle=False)
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
@@ -85,12 +94,12 @@ def test(epoch):
     return test_loss / total, acc
 
 
-optimizers = [(AdaBelief,  5e-3), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0.1)]
+optimizers = [(AdaBelief, 5e-3), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0.1)]
 
 epochs = 50
-#lr = 0.005
-print(50*len(trainloader))
-model_names = ["resnet152", "resnet101", "resnet18"]
+# lr = 0.005
+print(50 * len(trainloader))
+model_names = ["densenet121", "densenet201", "resnext50_32x4d", "resnet152", "resnet101", "resnet18"]
 
 data = dict()
 for model_name in model_names:

@@ -148,7 +148,7 @@ class AdaBelief(Optimizer):
                 # Update first and second moment running average
                 exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
                 grad_residual = grad - exp_avg
-                exp_avg_var.mul_(beta2).addcmul_( grad_residual, grad_residual, value=1 - beta2)
+                exp_avg_var.mul_(beta2).addcmul_(grad_residual, grad_residual, value=1 - beta2)
 
                 if amsgrad:
                     max_exp_avg_var = state['max_exp_avg_var']
