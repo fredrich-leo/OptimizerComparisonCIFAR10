@@ -17,7 +17,8 @@ from lamb import Lamb
 
 print("Cuda: ", torch.cuda.is_available())
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-CIFAR10 = False
+CIFAR10 = True
+
 
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
@@ -25,9 +26,12 @@ def weights_init(m):
         torch.nn.init.torch.nn.init.xavier(m.bias.data)
 
 
-models = {"resnext50_32x4d": models.resnext50_32x4d,
+models = {"densenet201": models.densenet201,
+          "resnext50_32x4d": models.resnext50_32x4d,
           "densenet121": models.densenet121,
-          "resnet101": models.resnet101}
+          "resnet18": models.resnet18,
+          "resnet101": models.resnet101,
+          "resnet152": models.resnet152}
 # Data
 print('==> Preparing data..')
 transform_train = transforms.Compose([
@@ -99,7 +103,7 @@ optimizers = [(AdaBelief, 5e-3), (Lamb, 5e-3), (optim.Adam, 5e-3), (optim.SGD, 0
 epochs = 50
 # lr = 0.005
 print(50 * len(trainloader))
-model_names = ["densenet121", "densenet201", "resnext50_32x4d", "resnet152", "resnet101", "resnet18"]
+model_names = list(models.keys())
 
 data = dict()
 for model_name in model_names:
